@@ -2274,7 +2274,7 @@ expo-face-detector@^8.0.0:
   resolved "https://registry.yarnpkg.com/expo-face-detector/-/expo-face-detector-8.0.0.tgz#dd8fcdffba2200bc8d96c0c26e1456ab42315226"
   integrity sha512-eO1JQ8DdtRJbsubb8a3QvEPrajz8QmLVEF6rcJP82NoS8d4cPgprcs65GNgxixJS1ZrVTEnqjDlNtcVA2FtsQg==
 
-expo-file-system@~8.0.0:
+expo-file-system@^8.0.0, expo-file-system@~8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-8.0.0.tgz#60b90c8a375308dc85922592a77531a8e0cde6f7"
   integrity sha512-mi84jt3EHVUfxu5eGOikNuRDi7+5daCFSP9LVgk5aQz8Oepo143vnH/+WE4lQEg+u8dB6EmmCWncyc2Fklxv7A==
@@ -2304,6 +2304,11 @@ expo-location@~8.0.0:
   integrity sha512-48i4dUCaqPTwSri79yummKwg6vE6loI7d4iHCrbG4EEuN3fhS8I9xU60CEkoNZTziH9zK0iw4KSjr7DbXUAaCw==
   dependencies:
     invariant "^2.2.4"
+
+expo-media-library@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/expo-media-library/-/expo-media-library-8.0.0.tgz#d763a2f39a81348d357171be5ea486679c2edb86"
+  integrity sha512-7TIcJjmQq+sH3deIVjwyQYa3nVsLZZUj6fQYA3R+DrFNRT6ehmd1Lai0klTa7ma3pflPEC4Uv2zOyf53alvD2w==
 
 expo-permissions@^8.0.0, expo-permissions@~8.0.0:
   version "8.0.0"

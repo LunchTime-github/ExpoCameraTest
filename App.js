@@ -2,12 +2,15 @@ import React from "react";
 import { ActivityIndicator, Dimensions, TouchableOpacity } from "react-native";
 import * as Permissions from "expo-permissions";
 import * as FaceDetector from "expo-face-detector";
+import * as MediaLibrary from "expo-media-library";
 import { Camera } from "expo-camera";
 import { MaterialIcons } from "@expo/vector-icons";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const { width, height } = Dimensions.get("window");
+
+const ALBUM_NAME = "Expo App"
 
 const CenterView = styled.View`
   flex: 1;
@@ -19,6 +22,7 @@ const CenterView = styled.View`
 const CameraBox = styled.View`
   border-radius: 40px;
   overflow: hidden;
+  /* display: none; */
 `;
 
 const Text = styled.Text`
@@ -31,6 +35,16 @@ const IconBar = styled.View`
 `;
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasPermission: null,
+      cameraType: Camera.Constants.Type.front,
+      smileDetected: false
+    };
+    this.cameraRef = React.createRef();
+  }
+
   state = {
     hasPermission: null,
     cameraType: Camera.Constants.Type.front,
@@ -64,6 +78,7 @@ export default class App extends React.Component {
         <CenterView>
           <CameraBox>
             <Camera
+              ref={this.cameraRef}
               type={cameraType}
               ratio={`${ratioArr[0]}:${ratioArr[1]}`}
               style={{
@@ -125,7 +140,52 @@ export default class App extends React.Component {
           smileDetected: true
         });
         console.log("take Photo");
+        this._takePhoto();
       }
+    }
+  };
+
+  _takePhoto = async () => {
+    try {
+      if (this.cameraRef.current) {
+        let { uri } = await this.cameraRef.current.takePictureAsync({
+          quality: 1,
+          exif: true
+        });
+        this._savePhoto(uri);
+      }
+    } catch (error) {
+      alert(error);
+      this.setState({
+        smileDetected: false
+      });
+    }
+  };
+
+  _savePhoto = async uri => {
+    try {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status === "granted") {
+        const asset = await MediaLibrary.createAssetAsync(uri);
+        let album = await MediaLibrary.getAlbumAsync(ALBUM_NAME);
+        if (album === null) {
+          album = await MediaLibrary.createAlbumAsync(ALBUM_NAME, asset);
+        } else {
+          await MediaLibrary.addAssetsToAlbumAsync([asset], album.id);
+        }
+        await MediaLibrary.deleteAssetsAsync([asset]);
+        setTimeout(
+          () =>
+            this.setState({
+              smileDetected: false
+            }),
+          2000
+        );
+      } else {
+        this.setState({ hasPermission: false });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 }
